@@ -1,7 +1,7 @@
 ## Overview
 The code in this repository is used to generate the analysis presented in Patterson and Cardiff (2023), _Stiff, Smooth, and Solid?: Complex Fracture Hydraulics' Imprint on Oscillatory Flow Interference Testing_, a manuscript submitted to Water Resources Research for peer review. This paper describes a suite of numerical oscillatory hydraulic tomography (OHT) experiments to explore potential mechanisms contributing to an period-dependence in effective fracture hydraulic parameter estimates returned when characterizing bedrock fractures using oscillatory pressure signals. 
 
-## Models
+## models
 This folder contains MATLAB scripts for each model used to simulate oscillatory flow tests and generate synthetic data used for parameter estimation. 
 * fracture_heterogeneity.m: 2-D numerical groundwater flow model that explores the impact of aperture heterogeneity on effective fracture hydraulic parameter estimates
 * validation_2d.m: This model verifies the accuracy of the above numerical model by comparing head phasors simulated by a homogeneous 2-D numerical model to head phasors simulated for a fully confined aquifer as described by Rasmussen et al. (2003)
