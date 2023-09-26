@@ -9,7 +9,8 @@ This folder contains MATLAB scripts for each model used to simulate oscillatory 
 * validation_3d.m: This model verifies the accuracy of the above numerical model by comparing head phasors simulated by a homogeneous 3-D numerical model to head phasors simulated for a leaky confined aquifer as described by Rasmussen et al. (2003)
 * fracture_hydromechanics.mph: Axi-symmeteric COMSOL hydromechanical model that simulates pressure and fracture displacement signals and outputs the simulated data as .csv file, which serves as the input for hydromechanics_pest.m
 * hydromechanics_pest.m: Uses COMSOL outputs to conduct effective fracture hydraulic parameter estimation
-All MATLAB scripts were developed using MATLAB 2019b and have recently been executed using MATLAB 2021b. Hydromechanical modeling was conducted using COMSOL 5.6
+ 
+_All MATLAB scripts were developed using MATLAB 2019b and have recently been executed using MATLAB 2021b. Hydromechanical modeling was conducted using COMSOL 5.6_
 
 ## func_lib
 This folder contains all of the necessary function files to execute the modeling scripts described above.
