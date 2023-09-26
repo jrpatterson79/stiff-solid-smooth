@@ -2,7 +2,7 @@
 % Numerical Modeling Analysis
 
 % This code generates Figure 2 as seen in:
-% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Solid, and Smooth?: Complex Fracture Hydraulic Hydraulics Revealed through Oscillatory Flow Interference Testing. Submitted to Water Resources Research
+% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Smooth, and Solid?: Complex Fracture Hydraulic Hydraulics' Imprints on Oscillatory Hydraulic Testing. Submitted to Water Resources Research.
 
 % Code developed by Jeremy Patterson
 % Created June 2021; Updated Jan 2023
@@ -12,6 +12,7 @@ close all; clear; clc
 
 %% Load Heterogeneity Data
 file_dir = '/.../.../'; % Provide the directory location to file1 and file2 immediately below
+
 file1 = 'seed_50.mat';
 file2 = 'seed_15.mat';
 
@@ -103,4 +104,3 @@ c.Layout.Tile = 'west';
 tl.TileSpacing = 'loose';
 tl.Padding = 'loose';
 set(gcf, 'Position', [100 100 1100 1100/1.1])
-% print([print_dir 'Fig_2'], '-dpng', '-r300')

@@ -2,7 +2,7 @@
 % Numerical Modeling Analysis
 
 % This code generates Figure 5, Figure 9, Figure 10, and Figure 11 as seen in:
-% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Solid, and Smooth?: Complex Fracture Hydraulic Hydraulics Revealed through Oscillatory Flow Interference Testing. Submitted to Water Resources Research
+% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Smooth, and Solid?: Complex Fracture Hydraulic Hydraulics' Imprints on Oscillatory Hydraulic Testing. Submitted to Water Resources Research.
 
 % Code developed by Jeremy Patterson
 % Created August 2021; Updated Jan 2023
@@ -10,11 +10,9 @@
 %% Clean Environment
 close all; clear; clc
 
-%% Specify Directory
-addpath('/.../.../') % Provide the directory location to the subdirectory func_lib which contains all of the necessary function files 
-
 %% Import and Parse Data
 mech_dir = '/.../.../'; % Specify the directory location to the hydromechanical mat file indicated on the line below
+
 load([mech_dir 'hydromechanical_pest_results.mat'])
 
 %% Figures
@@ -26,6 +24,7 @@ yyaxis left
 ax = gca;
 plot(data.time_s_(p_idx), h_obs(p_idx,4), '-', 'LineWidth', 3)
 grid on
+ax.GridAlpha = 0.7;
 xlabel('Time (s)')
 ylabel('Head Change (m)')
 axis([0 P(6)*10 -0.15 0.15])
@@ -51,6 +50,7 @@ scatter(test_list(:,1), abs(press_phasor_imperm), 125, test_list(:,4), 'filled',
 ax1.XScale = 'log';
 ax1.YScale = 'log';
 grid on
+ax1.MinorGridAlpha = 0.7;
 axis([0 P(end) 2e-2 1e0])
 caxis([4 16])
 ylabel('Head Amplitude (m)')
@@ -66,6 +66,7 @@ scatter(test_list(:,1), abs(press_phasor_perm), 125, test_list(:,4), 'filled',..
 ax2.XScale = 'log';
 ax2.YScale = 'log';
 grid on
+ax2.MinorGridAlpha = 0.7;
 axis([0 P(end) 2e-2 1e0])
 caxis([4 16])
 ylabel('Head Amplitude (m)')
@@ -81,6 +82,7 @@ scatter(test_list(:,1), abs(strain_phasor_imperm)*1e6, 125, test_list(:,4), 'fil
 ax3.XScale = 'log';
 ax3.YScale = 'log';
 grid on
+ax3.MinorGridAlpha = 0.7;
 axis([0 P(end) 4e-2 1e1])
 caxis([4 16])
 ylabel('Displacement Amplitude (\mum)')
@@ -95,6 +97,7 @@ scatter(test_list(:,1), abs(strain_phasor_perm)*1e6, 125, test_list(:,4), 'fille
 ax4.XScale = 'log';
 ax4.YScale = 'log';
 grid on
+ax4.MinorGridAlpha = 0.7;
 axis([0 P(end) 4e-2 1e1])
 caxis([4 16])
 ylabel('Displacement Amplitude (\mum)')
@@ -112,14 +115,15 @@ c.Label.String = 'Inter-well Spacing (m)';
 c.FontSize = 24;
 set(gcf, 'Position', [0 0 1100 1100/1.1])
 
-% Figure 10 - Impermeable vs Permeable parameter estimates
+% Figure 10 - Permeable bedrock parameter estimates
 figure(10)
 clf
 subplot(2,3,[1:2,4:5])
 ax = gca;
 scatter(test_list(:,1), exp(s_hat_perm(:,3)), 125, test_list(:,4),...
-        'd', 'filled', 'MarkerEdgeColor', 'k')
+        'filled', 'MarkerEdgeColor', 'k')
 grid on
+ax.MinorGridAlpha = 0.7;
 axis([1e1 1e3 1e-3 2e0])
 ax.XScale ='log';
 ax.YScale = 'log';
@@ -135,10 +139,11 @@ text(800, 1.7, 'A', 'FontSize', 30, 'FontWeight', 'bold')
 subplot(2,3,3)
 ax = gca;
 scatter(test_list(:,1), exp(s_hat_perm(:,1)), 125, test_list(:,4),...
-        'd', 'filled', 'MarkerEdgeColor', 'k')
+        'filled', 'MarkerEdgeColor', 'k')
 hold on
 plot([P(1) P(end)], [exp(lnT) exp(lnT)], 'k--', 'LineWidth', 3)
 grid on
+ax.MinorGridAlpha = 0.7;
 axis([1e1 1e3 1e-8 1e-4])
 ax.XScale = 'log';
 ax.YScale = 'log';
@@ -151,10 +156,11 @@ text(650, 6.5e-5, 'B', 'FontSize', 30, 'FontWeight', 'bold')
 subplot(2,3,6)
 ax = gca;
 scatter(test_list(:,1), exp(s_hat_perm(:,2)), 125, test_list(:,4),...
-        'd', 'filled', 'MarkerEdgeColor', 'k')
+        'filled', 'MarkerEdgeColor', 'k')
 hold on
 plot([P(1) P(end)], [exp(-17.4831) exp(-17.4831)], 'k--', 'LineWidth', 3)
 grid on
+ax.MinorGridAlpha = 0.7;
 ax.XScale = 'log';
 ax.YScale = 'log';
 axis([1e1 1e3 1e-8 1e-4])
@@ -166,7 +172,7 @@ ax.FontSize = 30;
 text(650, 6.5e-5, 'C', 'FontSize', 30, 'FontWeight', 'bold')
 set(gcf, 'Position', [100 100 2025 2025/1.8])
 
-% Figure 11 - Effective T for multiple k
+% Figure 11 - Effective T for multiple k (unpublished)
 r_idx = test_list(:,4) == 4;
 lbls = {'K = 1e-15 m/s', 'K = 3e-8 m/s', 'K = 3e-6 m/s'};
 col = {[0.9290 0.6940 0.1250], [0.4660 0.6740 0.1880], [0.6350 0.0780 0.1840]};

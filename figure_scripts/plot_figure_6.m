@@ -2,7 +2,7 @@
 % Numerical Modeling Analysis
 
 % This code generates Figure 6 as seen in:
-% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Solid, and Smooth?: Complex Fracture Hydraulic Hydraulics Revealed through Oscillatory Flow Interference Testing. Submitted to Water Resources Research.
+% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Smooth, and Solid?: Complex Fracture Hydraulic Hydraulics' Imprints on Oscillatory Hydraulic Testing. Submitted to Water Resources Research.
 
 % Code developed by Jeremy Patterson
 % Created Nov 2022; Updated Jan 2023
@@ -12,7 +12,8 @@ close all; clear; clc
 
 %% Load Field Data
 
-field_dir = '/.../.../'; % Provide the directory location to '2019_pest_results.mat'
+% field_dir = '/.../.../'; % Provide the directory location to '2019_pest_results.mat'
+field_dir = '/Users/jpatt/My Drive/github/stiff-solid-smooth/files/';
 load([field_dir '2019_pest_results.mat'])
 
 % Find field tests with pumping period >= 10 s
@@ -42,7 +43,7 @@ s_hat_lky = [s_opt(:,3) s_opt(:,1) s_opt(:,2)];
 lky_list = syn_data;
 
 %% Load Hydromechanical Modeling Results
-mech_dir = '/.../.../'; % Provide the directory location the the hydromechanical results 'poromech_pest_results.mat'
+% mech_dir = '/.../.../'; % Provide the directory location the the hydromechanical results 'poromech_pest_results.mat'
 load([mech_dir 'hydromechanical_pest_results.mat'])
 
 s_hat_mech = [s_hat_imperm(:,3) s_hat_imperm(:,1) s_hat_imperm(:,2)];
@@ -82,6 +83,7 @@ ax1 = nexttile(1);
 scatter(field_list(field_idx,1), exp(s_hat_field(field_idx,1)), 125, field_list(field_idx,4),...
         'filled', 'MarkerEdgeColor', 'k')
 grid on
+ax1.MinorGridAlpha = 0.7;
 axis([min(field_list(field_idx,1)) max(field_list(field_idx,1)) 1e-2 1e2])
 caxis([4 16])
 ax1.YTick = [1e-2 1e0 1e2];
@@ -90,13 +92,14 @@ ax1.YScale = 'log';
 ylabel('Diffusivity (m^2/s)')
 ax1.FontSize = 30;
 text(225, 65, 'A', 'FontSize', 30, 'FontWeight', 'bold')
-title('Field Results', 'FontSize', 24)
+% title('Field Results', 'FontSize', 24)
 
 % Field Transmissivity
 ax5 = nexttile(5);
 scatter(field_list(field_idx,1), exp(s_hat_field(field_idx,2)), 125, field_list(field_idx,4),...
         'filled', 'MarkerEdgeColor', 'k')
 grid on
+ax5.MinorGridAlpha = 0.7;
 axis([min(field_list(field_idx,1)) max(field_list(field_idx,1)) 1e-7 1e-3])
 ax5.YTick = [1e-7;1e-5;1e-3];
 ax5.XScale = 'log';
@@ -111,6 +114,7 @@ ax9 = nexttile(9);
 scatter(field_list(field_idx,1), exp(s_hat_field(field_idx,3)), 125, field_list(field_idx,4),...
         'filled', 'MarkerEdgeColor', 'k')
 grid on
+ax9.MinorGridAlpha = 0.7;
 axis([min(field_list(field_idx,1)) max(field_list(field_idx,1)) 1e-7 1e-3])
 ax9.YTick = [1e-7; 1e-5; 1e-3];
 ax9.XScale = 'log';
@@ -126,8 +130,9 @@ scatter(heterog_list(:,1), exp(s_hat_relz1(:,1)), 125, heterog_list(:,4),...
         's', 'filled', 'MarkerEdgeColor', 'k')
 hold on
 scatter(heterog_list(:,1), exp(s_hat_relz2(:,1)), 125, heterog_list(:,4),...
-        'd', 'filled', 'MarkerEdgeColor', 'k')
+        '>', 'filled', 'MarkerEdgeColor', 'k')
 grid on
+ax2.MinorGridAlpha = 0.7;
 ylim([1e0 1e4])
 caxis([4 16])
 ax2.YTick = [1e0 1e2 1e4];
@@ -141,7 +146,7 @@ l.Box = 'off';
 l.FontSize = 20;
 l.Location = 'northwest';
 text(650, 6.5e3, 'D', 'FontSize', 30, 'FontWeight', 'bold')
-title('Aperture Heterogeneity', 'FontSize', 24)
+% title('Aperture Heterogeneity', 'FontSize', 24)
 
 % Heterogeneity Transmissivity
 ax6 = nexttile(6);
@@ -149,9 +154,10 @@ scatter(heterog_list(:,1), exp(s_hat_relz1(:,2)), 125, heterog_list(:,4),...
         's', 'filled', 'MarkerEdgeColor', 'k')
 hold on
 scatter(heterog_list(:,1), exp(s_hat_relz2(:,2)), 125, heterog_list(:,4),...
-        'd', 'filled', 'MarkerEdgeColor', 'k')
+        '>', 'filled', 'MarkerEdgeColor', 'k')
 plot([P(1) P(end)], [exp(lnT_mean) exp(lnT_mean)], 'k--', 'LineWidth', 3)
 grid on
+ax6.MinorGridAlpha = 0.7;
 ylim([1e-7 1e-3])
 ax6.YTick = [1e-7; 1e-5; 1e-3];
 caxis([4 16])
@@ -166,9 +172,10 @@ scatter(heterog_list(:,1), exp(s_hat_relz1(:,3)), 125, heterog_list(:,4),...
         's', 'filled', 'MarkerEdgeColor', 'k')
 hold on
 scatter(heterog_list(:,1), exp(s_hat_relz2(:,3)), 125, heterog_list(:,4),...
-        'd', 'filled', 'MarkerEdgeColor', 'k')
+        '>', 'filled', 'MarkerEdgeColor', 'k')
 plot([P(1) P(end)], [exp(lnS_mean) exp(lnS_mean)], 'k--', 'LineWidth', 3)
 grid on
+ax10.MinorGridAlpha = 0.7;
 axis([1e1 1e3 1e-9 1e-5])
 ax10.YTick = [1e-9;1e-7;1e-5];
 caxis([4 16])
@@ -184,6 +191,7 @@ scatter(lky_list(:,1), exp(s_hat_lky(:,1)), 125, lky_list(:,4),...
 hold on
 plot([P(1) P(end)], [exp(lnD_mean) exp(lnD_mean)], 'k--', 'LineWidth', 3)
 grid on
+ax3.MinorGridAlpha = 0.7;
 axis([1e1 1e3 1e-3 1e1])
 ax3.YTick = [1e-3; 1e-1; 1e1];
 caxis([4 16])
@@ -191,7 +199,7 @@ ax3.XScale = 'log';
 ax3.YScale = 'log';
 ax3.FontSize = 30;
 text(650, 6.5, 'G', 'FontSize', 30, 'FontWeight', 'bold')
-title('Fracture-Host Rock Fluid Exchange', 'FontSize', 24)
+% title('Fracture-Host Rock Fluid Exchange', 'FontSize', 24)
 
 % Leaky Transmissivity
 ax7 = nexttile(7);
@@ -200,6 +208,7 @@ scatter(lky_list(:,1), exp(s_hat_lky(:,2)), 125, lky_list(:,4),...
 hold on
 plot([P(1) P(end)], [exp(lnT_mean) exp(lnT_mean)], 'k--', 'LineWidth', 3)
 grid on
+ax7.MinorGridAlpha = 0.7;
 axis([1e1 1e3 1e-8 1e-4])
 caxis([4 16])
 ax7.YTick = [1e-8; 1e-6; 1e-4];
@@ -215,6 +224,7 @@ scatter(lky_list(:,1), exp(s_hat_lky(:,3)), 125, lky_list(:,4),...
 hold on
 plot([P(1) P(end)], [exp(lnS_mean) exp(lnS_mean)], 'k--', 'LineWidth', 3)
 grid on
+ax11.MinorGridAlpha = 0.7;
 axis([1e1 1e3 1e-8 1e-4])
 caxis([4 16])
 ax11.YTick = [1e-8; 1e-6; 1e-4];
@@ -228,6 +238,7 @@ ax4 = nexttile(4);
 scatter(mech_list(:,1), exp(s_hat_mech(:,1)), 125, mech_list(:,4),...
         'filled', 'MarkerEdgeColor', 'k')
 grid on
+ax4.MinorGridAlpha = 0.7;
 axis([1e1 1e3 1e-3 1e1])
 ax4.YTick = [1e-3; 1e-1; 1e1];
 caxis([4 16])
@@ -235,7 +246,7 @@ ax4.XScale ='log';
 ax4.YScale = 'log';
 ax4.FontSize = 30;
 text(650, 6.5, 'J', 'FontSize', 30,'FontWeight', 'bold')
-title('Fracture Hydromechanics', 'FontSize', 24)
+% title('Fracture Hydromechanics', 'FontSize', 24)
 
 % Mechanical Transmissivity
 ax8 = nexttile;
@@ -244,6 +255,7 @@ scatter(mech_list(:,1), exp(s_hat_mech(:,2)), 125, mech_list(:,4),...
 hold on 
 plot([P(1) P(end)], [exp(lnT_mean) exp(lnT_mean)], 'k--', 'LineWidth', 3)
 grid on
+ax8.MinorGridAlpha = 0.7;
 axis([1e1 1e3 1e-8 1e-4])
 caxis([4 16])
 ax8.YTick = [1e-8; 1e-6; 1e-4];
@@ -259,6 +271,7 @@ scatter(mech_list(:,1), exp(s_hat_mech(:,3)), 125, mech_list(:,4),...
 hold on
 plot([P(1) P(end)], [exp(lnS_mean) exp(lnS_mean)], 'k--', 'LineWidth', 3)
 grid on
+ax12.MinorGridAlpha = 0.7;
 axis([1e1 1e3 1e-8 1e-4])
 caxis([4 16])
 ax12.YTick = [1e-8; 1e-6; 1e-4];
@@ -274,4 +287,4 @@ c = colorbar;
 c.Layout.Tile = 'east';
 c.Label.String = 'Inter-well Spacing (m)';
 c.FontSize = 26;
-set(gcf, 'Position', [0 0 2025 2025/1.1])
+set(gcf, 'Position', [0 0 2500 2500/1.1])
