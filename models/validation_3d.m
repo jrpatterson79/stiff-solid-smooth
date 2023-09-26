@@ -19,7 +19,7 @@ addpath(genpath('/.../.../')) % Provide location to func_lib subdirectory which 
 % Specify Domain Geometry
 xmin = -400; xmax = -xmin; dx = 2;
 ymin = xmin; ymax = xmax; dy = dx;
-dz = 5e-2; zmin = 0; zmax = 5*dz;
+dz = [5e-2; 0.075; 0.1125; 0.17; 0.25]; zmin = 0; zmax = sum(dz);
 
 domain = struct('x',[],'y',[],'z',[]);
 domain.x = [xmin : dx : xmax];
@@ -86,7 +86,7 @@ eta_r = 0.15;           % Host rock porosity (-)
 % Fracture Aperture Properties
 ln_aper = log(3e-4); 
 T_frac = ((rho*g)/(12 * mu)) * exp(ln_aper)^3;
-K_frac = log(T_frac / (dz*2));
+K_frac = log(T_frac / (dz(1)*2));
 
 Ss_rock = rho * g * (RockComp + (eta_r * WaterComp)); 
 Ss_f = rho * g * WaterComp;
@@ -94,7 +94,7 @@ V_frac = Ss_f * dx * dy * 0.4;
 V_rock = Ss_rock * dx * dy * 0.6;
 Ss_eff = (V_frac + V_rock) / (dx*dy);
 S_frac = Ss_eff * exp(ln_aper);
-Ss_frac = log(S_frac / (dz*2)); 
+Ss_frac = log(S_frac / (dz(1)*2)); 
 
 lnK = [K_frac log(1e-10) log(3e-1)]; %[Fracture Confining Bedrock]
 lnSs =[Ss_frac -50 -1];              %[Fracture Confining Bedrock]
@@ -127,7 +127,7 @@ soln = 'leaky'; % Specify leaky analytical model for validation
 % Constant vertical discretization
 T = exp(lnK(1)) * dz * 2;        % Fracture transmissivity (m^2/s)
 S = exp(lnSs(1)) * dz * 2;       % Fracture storativity (-)
-L = (exp(lnK(2)) / (dz*2)) * 2;  % Confining unit leakance (s^-1)
+L = (exp(lnK(2)) / (dz(2)+dz(3))) * 2;  % Confining unit leakance (s^-1)
 
 syn_data(:,1) = (2*pi) ./ test_list(:,1); % Oscillation period (s)
 syn_data(:,2) = test_list(:,1);           % Angular Frequency (rad/s)

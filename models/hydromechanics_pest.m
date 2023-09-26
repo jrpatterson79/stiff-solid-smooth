@@ -8,7 +8,7 @@
 % synthetic data.
 
 % This code generates a mat file that is used to reproduce Figure 6 G-I and Figure 10 as seen in:
-% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Solid, and Smooth?: Complex Fracture Hydraulic Hydraulics Revealed through Oscillatory Flow Interference Testing. Submitted to Water Resources Research.
+% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Smooth, and Solid?: Complex Fracture Hydraulic Hydraulics' Imprints on Oscillatory Hydraulic Testing. Submitted to Water Resources Research.
 
 % Code developed by Jeremy Patterson
 % Created Aug 2021; Updated Jan 2023

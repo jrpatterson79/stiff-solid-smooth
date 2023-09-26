@@ -8,7 +8,7 @@
 % synthetic data.
 
 % This code generates a mat file that is used to reproduce Figure 2, Figure 6 D-F, and Figure 7 as seen in:
-% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Solid, and Smooth?: Complex Fracture Hydraulic Hydraulics Revealed through Oscillatory Flow Interference Testing. Submitted to Water Resources Research.
+% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Smooth, and Solid?: Complex Fracture Hydraulic Hydraulics' Imprints on Oscillatory Hydraulic Testing. Submitted to Water Resources Research.
 
 % Code developed by Jeremy Patterson
 % Created Dec 2020; Updated Jan 2023
@@ -194,7 +194,7 @@ for relz = 1 : num_relz
     y_fxn = @(params) OHT_run_distribKSs(params, domain, bdrys, inputs, 1);
     y_obs = y_fxn([lnT_true; lnS_true]);
     
-    % Conduct parameter estimation for each observation well and each oscillatory flow test
+    % Conduct parameter estimation s_hat = [T S D]
     for i = 1 : num_obs
         y_func = @(s) RasSoln(syn_data(i,:), s, 'confined');
         [pest, ~, out_flag] = Lev_Marq(syn_data(i,:), s_init, [y_obs(i); y_obs(num_obs+i)], R_inv, lambda, delta, soln, max_iter);

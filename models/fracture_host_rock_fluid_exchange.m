@@ -8,7 +8,7 @@
 % synthetic data.
 
 % This code generates a mat file that is used to reproduce Figure 6 G-I, and Figure 8 as seen in:
-% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Solid, and Smooth?: Complex Fracture Hydraulic Hydraulics Revealed through Oscillatory Flow Interference Testing. Submitted to Water Resources Research.
+% Patterson, Jeremy R. & Cardiff, Michael (2023). Stiff, Smooth, and Solid?: Complex Fracture Hydraulic Hydraulics' Imprints on Oscillatory Hydraulic Testing. Submitted to Water Resources Research.
 
 % Code developed by Jeremy Patterson
 % Created Dec 2020; Updated Jan 2023
@@ -17,9 +17,8 @@
 close all; clear; clc
 
 %% Specify Directory
-save_dir = '/Users/jpatt/My Drive/PhD/WRR_FreqDepend/MAT_Files/Fluid_Exchange/';
-fig_dir = '/Users/jpatt/My Drive/PhD/Drafts/Patterson_Cardiff_WRR_2023/Figures/';
-addpath(genpath('/Users/jpatt/My Drive/PhD/WRR_FreqDepend/Code_Sandbox/'))
+save_dir = '/.../.../.../';
+addpath(genpath('/.../.../.../')) % Provide location to func_lib subdirectory which contains necessary function files to execute this code
 
 %% Specify Model Run Type
 % Choose homogeneous ('homog') or heterogeneous ('heterog') model run
@@ -39,7 +38,7 @@ soln = 'confined';
 % Specify Domain Geometry
 xmin = -400; xmax = -xmin; dx = 2;
 ymin = xmin; ymax = xmax; dy = dx;
-dz = 5e-2; zmin = 0; zmax = 5*dz;
+dz = [5e-2; 0.075; 0.1125; 0.17; 0.25]; zmin = 0; zmax = sum(dz);
 
 domain = struct('x',[],'y',[],'z',[]);
 domain.x = [xmin : dx : xmax];
@@ -52,7 +51,7 @@ numz = numel(domain.z) - 1;
 num_cells = numx * numy * numz;
 
 % Specify well locations
-elev = dz / 2; 
+elev = dz(1) / 2; 
 well_locs = [0 0 elev;...
              0 -4 elev;...
              -6 0 elev;...
@@ -63,7 +62,9 @@ num_wells = numel(well_locs(:,1));
 % Grid Domain
 [coords, cgrid] = plaid_cellcenter_coord(domain);
 node_list = unique(coords(:,3));
-f_idx = find(coords(:,3) == node_list(1));     % Locate fracture grid cells in the model domain
+
+% Locate fracture grid cells in the model domain
+f_idx = find(coords(:,3) == node_list(1));     
 fx_coords = [coords(f_idx,1) coords(f_idx,2)]; 
 
 % Specify boundary types and boundary values (x / y constant head
@@ -75,7 +76,7 @@ bdrys = struct('types',bdry_types,'vals',bdry_vals,'leaks',bdry_L);
 
 %% Create Test List
 P = logspace(1, 3, 20); % Oscilltion period [s]
-Q_max = 7e-5;           % Max pumping rate [m^3/s]
+Q_max = 7e-5/2;         % Max pumping rate [m^3/s]
 
 %Test list for OHT input [omega pump_well_index peak_flow_rate obs_well_index]
 test_list = [];
@@ -144,12 +145,13 @@ RockComp = 1.41e-8;     % Rock compressibility (Pa^-1)
 WaterComp = 1 / 2.1e9;  % Fluid compressibility (Pa^-1)
 eta_r = 0.15;           % Host rock porosity (-)
 
-% Fracture properties
-T_frac = ((rho*g)/(12 * mu)) .* exp(ln_aper_true).^3; 
-K_frac = log(T_frac ./ (dz*2)); % Fracture hydraulic conductivity
-K_rock = log(3e-8);             % Host rock hydraulic conductivity
+% Specify hydraulic properties
+T_frac = ((rho*g)/(12 * mu)) .* exp(ln_aper_true).^3; % Fracture transmissivity (m^2/s)
+K_frac = log(T_frac ./ (dz(1)*2));                    % Fracture hydraulic conductivity (m/s)
+K_rock = log(3e-8);                                   % Host rock hydraulic conductivity (m/s)
 
-Ss_rock = rho * g * (RockComp + (eta * WaterComp)); % Host rock specific storage
+Ss_rock = rho * g * (RockComp + (eta_r * WaterComp)); % Host rock specific storage
+
 % Natural rock fractures contain asperities. The next 5 lines of code take a volume averaging approach to calculate an effective fracture storativity 
 % to be applied throughout the fracture. 
 Ss_f = rho * g * WaterComp;
@@ -157,7 +159,7 @@ V_frac = Ss_f * dx * dy * 0.4;
 V_rock = Ss_rock * dx * dy * 0.6;
 Ss_eff = (V_frac + V_rock) / (dx*dy);
 S_frac = Ss_eff .* exp(ln_aper_true);
-Ss_frac = log(S_frac ./ (dz*2)); 
+Ss_frac = log(S_frac ./ (dz(1)*2)); 
 
 lnK_true = K_rock * ones(num_cells,1);   lnK_true(f_idx) = K_frac;
 lnSs_true = log(Ss_rock) * ones(num_cells,1); lnSs_true(f_idx) = Ss_frac;
@@ -188,208 +190,211 @@ R_inv = inv(data_err * eye(2));  % Data error covariance matrix
 % Initial Inversion Parameters
 lambda_init = 1e1;  % LM initial stabilization parameter
 delta = [0.1; 0.1]; % Parameter perturbation parameter for Jacobian
-s_init = [-16 -15;
-          -16 -15;
-          -15 -15;
-          -14 -15;
-          -15 -15;
-          -14 -14;
-          -14 -15;
-          -14 -15;
-          -13 -14;
-          -13 -14;
-          -17 -15;
-          -16 -15;
-          -15 -15;
-          -14 -14;
-          -15 -15;
-          -14 -14;
-          -14 -14;
-          -14 -14;
-          -12 -13;
-          -13 -14;
-          -16 -14;
-          -16 -15;
-          -15 -15;
-          -15 -15;
-          -15 -15;
-          -14 -14;
-          -14 -14;
-          -14 -14;
-          -13 -14;
-          -14 -14;
-          -16 -14;
-          -16 -15;
-          -15 -14;
-          -15 -15;
-          -16 -15;
-          -14 -14;
-          -15 -14;
-          -15 -14;
-          -13 -14;
-          -14 -14;
-          -17 -14;
-          -16 -14;
-          -15 -14;
-          -15 -14;
-          -16 -14;
-          -14 -14;
-          -15 -14;
-          -15 -14;
-          -13 -13;
-          -14 -14;
-          -17 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -16 -14;
-          -15 -14;
-          -15 -14;
-          -15 -14;
-          -14 -14;
-          -15 -14;
-          -17 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -16 -14;
-          -15 -14;
-          -15 -14;
-          -15 -14;
-          -14 -14;
-          -15 -14;
-          -17 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -15 -14;
-          -14 -14;
-          -15 -14;
-          -17 -14;
-          -16 -14;
-          -16 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -15 -14;
-          -16 -14;
-          -15 -14;
-          -15 -14;
-          -17 -14;
-          -17 -14;
-          -16 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -15 -14;
-          -17 -13;
-          -17 -14;
-          -16 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -15 -14;
-          -17 -13;
-          -17 -13;
-          -16 -14;
-          -16 -14;
-          -16 -14;
-          -16 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -16 -14;
-          -17 -13;
-          -17 -13;
-          -16 -14;
-          -16 -14;
-          -17 -14;
-          -16 -14;
-          -16 -14;
-          -16 -14;
-          -15 -14;
-          -16 -14;
-          -17 -13;
-          -17 -13;
-          -16 -13;
-          -16 -14;
-          -16 -13;
-          -16 -14;
-          -16 -13;
-          -16 -14;
-          -15 -14;
-          -16 -14;
-          -17 -13;
-          -17 -13;
-          -16 -13;
-          -16 -14;
-          -17 -14;
-          -16 -14;
-          -16 -14;
-          -16 -13;
-          -16 -14;
-          -16 -14;
-          -17 -12;
-          -17 -13;
-          -17 -13;
-          -16 -13;
-          -17 -13;
-          -16 -13;
-          -16 -13;
-          -16 -13;
-          -16 -14;
-          -16 -13;
-          -17 -12;
-          -17 -13;
-          -17 -13;
-          -17 -14;
-          -17 -13;
-          -17 -14;
-          -17 -14;
-          -17 -13;
-          -16 -14;
-          -16 -13;
-          -17 -12;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -17 -14;
-          -17 -13;
-          -17 -13;
-          -16 -13;
-          -17 -14;
-          -18 -12;
-          -17 -12;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -16 -14;
-          -17 -14;
-          -18 -12;
-          -17 -12;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -17 -13;
-          -17 -13];
 
-% Uncomment for realization 2 (seed = 15)
+% Initial parameter guesses [ln(T) ln(S)]
+% Uncomment for Realization 1 (seed = 50)
+s_init = [-16 -15;
+    -16 -15;
+    -15 -15;
+    -15 -15;
+    -15 -15;
+    -14 -15;
+    -14 -15;
+    -14 -15;
+    -13 -14;
+    -14 -15;
+    -16 -15;
+    -16 -15;
+    -15 -15;
+    -15 -15;
+    -15 -15;
+    -14 -15;
+    -14 -15;
+    -15 -15;
+    -13 -14;
+    -14 -15;
+    -17 -15;
+    -16 -15;
+    -15 -15;
+    -15 -15;
+    -15 -15;
+    -14 -14;
+    -14 -14;
+    -15 -15;
+    -13 -14;
+    -14 -14;
+    -17 -15;
+    -16 -15;
+    -15 -14;
+    -15 -15;
+    -16 -15;
+    -14 -14;
+    -14 -14;
+    -15 -14;
+    -13 -14;
+    -14 -14;
+    -17 -15;
+    -16 -15;
+    -15 -14;
+    -15 -14;
+    -16 -15;
+    -14 -14;
+    -15 -14;
+    -15 -14;
+    -13 -14;
+    -14 -14;
+    -17 -14;
+    -16 -14;
+    -15 -14;
+    -15 -14;
+    -16 -15;
+    -14 -14;
+    -15 -14;
+    -15 -14;
+    -14 -14;
+    -14 -14;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -15 -14;
+    -16 -14;
+    -15 -14;
+    -15 -14;
+    -15 -14;
+    -14 -14;
+    -15 -14;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -15 -14;
+    -16 -14;
+    -15 -14;
+    -15 -14;
+    -15 -14;
+    -14 -14;
+    -15 -14;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -16 -15;
+    -16 -14;
+    -16 -14;
+    -15 -14;
+    -15 -14;
+    -17 -13;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -15 -14;
+    -15 -14;
+    -17 -13;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -15 -14;
+    -16 -14;
+    -17 -13;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -15 -14;
+    -16 -14;
+    -17 -13;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -15 -14;
+    -16 -14;
+    -17 -13;
+    -17 -13;
+    -16 -13;
+    -16 -14;
+    -17 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -15 -14;
+    -16 -14;
+    -17 -13;
+    -17 -13;
+    -17 -14;
+    -16 -14;
+    -17 -13;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -16 -14;
+    -17 -12;
+    -17 -13;
+    -17 -13;
+    -16 -13;
+    -17 -13;
+    -16 -13;
+    -16 -13;
+    -16 -13;
+    -16 -14;
+    -16 -13;
+    -17 -12;
+    -17 -13;
+    -17 -13;
+    -16 -13;
+    -17 -13;
+    -16 -13;
+    -16 -13;
+    -16 -13;
+    -16 -13;
+    -16 -13;
+    -17 -12;
+    -17 -13;
+    -17 -13;
+    -17 -13;
+    -17 -13;
+    -16 -13;
+    -17 -13;
+    -17 -13;
+    -16 -13;
+    -16 -13;
+    -18 -12;
+    -17 -12;
+    -17 -13;
+    -17 -13;
+    -17 -13;
+    -17 -13;
+    -17 -13;
+    -17 -13;
+    -16 -13;
+    -16 -13;
+    -18 -12;
+    -17 -12;
+    -17 -12;
+    -17 -13;
+    -17 -12;
+    -17 -13;
+    -17 -13;
+    -17 -13;
+    -16 -13;
+    -17 -13];
+
+% Uncomment for Realization 2 (seed = 15)
 % s_init = [-16 -14;
 %           -15 -14;
 %           -15 -15;
@@ -591,7 +596,7 @@ s_init = [-16 -15;
 %           -17 -13;
 %           -17 -13];
 
-% Conduct parameter estimation
+% Conduct parameter estimation s_opt = [T S D]
 for i = 1 : num_obs
     y_func = @(s) RasSoln(syn_data(i,:), s, 'confined');
     [s_opt(i,:), s_step, flag] = Lev_Marq(syn_data(i,:), s_init(i,:)', [y_oht(i); y_oht(num_obs+i)], R_inv, lambda_init, delta, soln);
