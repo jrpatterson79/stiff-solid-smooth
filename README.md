@@ -1,5 +1,5 @@
 ## Overview
-The code in this repository is used to generate the analysis presented in Patterson and Cardiff (2023), _Stiff, Smooth, and Solid?: Complex Fracture Hydraulics' Imprint on Oscillatory Flow Interference Testing_, a manuscript submitted to Water Resources Research for peer review. This paper describes a suite of numerical oscillatory hydraulic tomography (OHT) experiments to explore potential mechanisms contributing to an period-dependence in effective fracture hydraulic parameter estimates returned when characterizing bedrock fractures using oscillatory pressure signals. 
+The code in this repository is used to generate the analysis presented in Patterson and Cardiff (2023), _Stiff, Smooth, and Solid?: Complex Fracture Hydraulics' Imprint on Oscillatory Flow Interference Testing_, a in press at Water Resources Research. This paper describes a suite of numerical oscillatory hydraulic tomography (OHT) experiments to explore potential mechanisms contributing to an period-dependence in effective fracture hydraulic parameter estimates returned when characterizing bedrock fractures using oscillatory pressure signals. 
 
 ## models
 This folder contains MATLAB scripts for each model used to simulate oscillatory flow tests and generate synthetic data used for parameter estimation. 
