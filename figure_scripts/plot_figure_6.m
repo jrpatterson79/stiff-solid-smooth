@@ -59,16 +59,16 @@ mech_list = test_list;
 rho_field = zeros(3,2); rho_relz1 = zeros(3,2); rho_relz2 = zeros(3,2); rho_lky = zeros(3,2); rho_mech = zeros(3,2);
 pval_field = zeros(3,2); pval_relz1 = zeros(3,2); pval_relz2 = zeros(3,2); pval_lky = zeros(3,2); pval_mech = zeros(3,2); 
 for i = 1:3
-    [rho_field(i,1), pval_field(i,1)] = corr(log(field_list(field_idx,1)), s_hat_field(field_idx,i));
-    [rho_field(i,2), pval_field(i,2)] = corr(log(field_list(field_idx,4)), s_hat_field(field_idx,i));
-    [rho_relz1(i,1), pval_relz1(i,1)] = corr(log(heterog_list(:,1)), s_hat_relz1(:,i));
-    [rho_relz1(i,2), pval_relz1(i,2)] = corr(log(heterog_list(:,4)), s_hat_relz1(:,i));
-    [rho_relz2(i,1), pval_relz2(i,1)] = corr(log(heterog_list(:,1)), s_hat_relz2(:,i));
-    [rho_relz2(i,2), pval_relz2(i,2)] = corr(log(heterog_list(:,4)), s_hat_relz2(:,i));
-    [rho_lky(i,1), pval_lky(i,1)] = corr(log(lky_list(:,1)), s_hat_lky(:,i));
-    [rho_lky(i,2), pval_lky(i,2)] = corr(log(lky_list(:,4)), s_hat_lky(:,i));
-    [rho_mech(i,1), pval_mech(i,1)] = corr(log(mech_list(:,1)), s_hat_mech(:,i));
-    [rho_mech(i,2), pval_mech(i,2)] = corr(log(mech_list(:,4)), s_hat_mech(:,i));
+    [rho_field(i,1), ~] = corr(log(field_list(field_idx,1)), s_hat_field(field_idx,i));
+    [rho_field(i,2), ~] = corr(log(field_list(field_idx,4)), s_hat_field(field_idx,i));
+    [rho_relz1(i,1), ~] = corr(log(heterog_list(:,1)), s_hat_relz1(:,i));
+    [rho_relz1(i,2), ~] = corr(log(heterog_list(:,4)), s_hat_relz1(:,i));
+    [rho_relz2(i,1), ~] = corr(log(heterog_list(:,1)), s_hat_relz2(:,i));
+    [rho_relz2(i,2), ~] = corr(log(heterog_list(:,4)), s_hat_relz2(:,i));
+    [rho_lky(i,1), ~] = corr(log(lky_list(:,1)), s_hat_lky(:,i));
+    [rho_lky(i,2), ~] = corr(log(lky_list(:,4)), s_hat_lky(:,i));
+    [rho_mech(i,1), ~] = corr(log(mech_list(:,1)), s_hat_mech(:,i));
+    [rho_mech(i,2), ~] = corr(log(mech_list(:,4)), s_hat_mech(:,i));
 end
 
 %% Figures
