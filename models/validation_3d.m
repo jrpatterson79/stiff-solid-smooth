@@ -7,7 +7,7 @@
 % Rasmussen et al. (2003).
 
 % Code developed by Jeremy Patterson
-% Created Dec 2018; Updated Jan 2023
+% Created Dec 2018; Updated Oct 2023
 
 %% Clean Environment
 close all; clear; clc
