@@ -12,8 +12,7 @@ close all; clear; clc
 
 %% Load Field Data
 
-% field_dir = '/.../.../'; % Provide the directory location to '2019_pest_results.mat'
-field_dir = '/Users/jpatt/My Drive/github/stiff-solid-smooth/files/';
+field_dir = '/.../.../'; % Provide the directory location to '2019_pest_results.mat'
 load([field_dir '2019_pest_results.mat'])
 
 % Find field tests with pumping period >= 10 s
